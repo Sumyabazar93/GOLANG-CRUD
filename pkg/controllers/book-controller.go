@@ -33,7 +33,6 @@ func GetBookById(w http.ResponseWriter, r *http.Request){
 	w.Header().Set("Content-Type", "pkglication/json")
 	w.WriteHeader(http.StatusOK)
 	w.Write(res)
-
 }
 func CreateBook(w http.ResponseWriter, r *http.Request){
 	CreateBook:=&models.Book{}

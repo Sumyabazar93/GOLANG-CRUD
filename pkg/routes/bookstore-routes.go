@@ -1,24 +1,18 @@
 package routes
 
 import (
-	"encoding/json"
-	"fmt"
-	"net/http"
-	"strconv"
-
 	"github.com/gorilla/mux"
 	"github.com/sumyabazar93/go-bookstore/pkg/controllers"
-	"github.com/sumyabazar93/go-bookstore/pkg/models"
-	"github.com/sumyabazar93/go-bookstore/pkg/utils"
 )
+
 var RegisterBookStore = func (router *mux.Router)  {
 	router.HandleFunc("/book/", controllers.CreateBook).Methods("POST")
 	router.HandleFunc("/book/", controllers.GetBook).Methods("GET")
 	router.HandleFunc("/book/{bookId}", controllers.GetBookById).Methods("GET")
 	router.HandleFunc("/book/{bookId}", controllers.UpdateBook).Methods("PUT")
-	router.HandleFunc("book/{bookId}", controllers.DeleteBook).Methods("DELETE")
+	router.HandleFunc("/book/{bookId}", controllers.DeleteBook).Methods("DELETE")
 }
-
+/*
 func UpdateBook(w http.ResponseWriter, r *http.Request) {
 	var updateBook = &models.Book{}
 	utils.ParseBody(r, updateBook)
@@ -44,3 +38,4 @@ func UpdateBook(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
 	w.Write(res)
 }
+*/
