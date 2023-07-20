@@ -3,6 +3,9 @@ package models
 import (
 	// "time"
 
+	"fmt"
+	"log"
+
 	"github.com/sumyabazar93/go-bookstore/pkg/config"
 	"gorm.io/gorm"
 )
@@ -38,6 +41,38 @@ func init(){
 	config.Connect()
 	db = config.GetDB()
 	db.AutoMigrate(&Book{})
+
+	
+	// defer db.Close()
+
+	tx := db.Begin()
+
+	defer func() {
+		if r := recover(); r != nil{
+			tx.Rollback()
+		}
+	}()
+
+	book1 := Book{Name:"Book One", Author: "Author One", Publication: "Sou"}
+
+	if err := tx.Create(&book1). Error; err != nil{
+		tx.Rollback()
+		log.Fatal("Error executing query 1:", err)
+		return
+	}
+
+	// book2 := Book{Name:"Book One"}
+
+	// if err := tx.Updates(&book2).Error; err != nil {
+	// 	tx.Rollback()
+	// 	log.Fatal("Error executing query 2:", err)
+	// 	return
+	// }
+
+	if err := tx.Commit().Error; err != nil {
+		log.Fatal("Error committing transaction", err)
+	}
+	fmt.Println("Transaction completed successfully!")
 }
 
 func(b *Book) CreateBook() *Book{
@@ -56,6 +91,6 @@ func GetBookById(Id int64) (*Book, *gorm.DB){
 }
 func DeleteBook(ID int64) Book{
 	var book Book
-	db.Where("ID=?", ID).Delete((book))
+	db.Where("ID=?", ID).Delete(&book)
 	return book
 }
